@@ -1,0 +1,1 @@
+history | awk '{print }' | sort | uniq -c | sort -nr | head -10
