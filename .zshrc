@@ -98,13 +98,17 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-alias hyprconf="nvim ~/.config/hypr/hyprland.conf"
-alias lh="ls -lah"
 
-eval "$(starship init zsh)"
+# Aliases
+alias lh="ls -lah"
+alias hyprconf="nvim ~/.config/hypr/hyprland.conf"
+alias relwaybar="killall waybar && waybar &" 
+alias grubconf="sudo nvim /etc/default/grub"
+alias relgrub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
+
+# Plugins
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+eval "$(starship init zsh)"
+eval "$(zoxide init --cmd cd zsh)"
