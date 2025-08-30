@@ -102,13 +102,53 @@ source $ZSH/oh-my-zsh.sh
 # Aliases
 alias lh="ls -lah"
 alias hyprconf="nvim ~/.config/hypr/hyprland.conf"
-alias relwaybar="killall waybar && waybar &" 
+
+alias waybarconf="nvim ~/.config/waybar/config"
+alias relwaybar="killall waybar && waybar &"
+
 alias grubconf="sudo nvim /etc/default/grub"
 alias relgrub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 
+alias zshconfig="nvim ~/.zshrc"
+alias relzsh="source ~/.zshrc"
+
+alias brewrefresh="brew update && brew upgrade && brew cleanup && brew autoremove"
+
+alias air='~/go/bin/air'
+
+HOMEBREW_NO_AUTO_UPDATE=1
+
+# php-switch
+php-switch() {
+    local version=$1
+    if [ -z "$version" ]; then
+        echo "Usage: php-switch <version> (e.g. php-switch 7.4)"
+        return 1
+    fi
+
+    if brew list php@"$version" >/dev/null 2>&1; then
+        current_php=$(php -v | head -n1)
+        echo "Switching from $current_php to PHP $version..."
+        brew unlink php@$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
+        brew link php@"$version" --force --overwrite
+        php -v | head -n1
+    else
+        echo "Undefined: PHP $version is not installed via Homebrew."
+    fi
+}
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
 # Plugins
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 eval "$(starship init zsh)"
 eval "$(zoxide init --cmd cd zsh)"
+export PATH="/usr/local/opt/mysql@8.4/bin:$PATH"
