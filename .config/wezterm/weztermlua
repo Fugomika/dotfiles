@@ -1,0 +1,29 @@
+local wezterm = require("wezterm")
+
+return {
+	keys = {
+		-- Ctrl+C -> send Cmd+C
+		{
+			key = "c",
+			mods = "CMD",
+			action = wezterm.action.SendKey({
+				key = "c",
+				mods = "CTRL",
+			}),
+		},
+
+		-- Cmd+C -> behave like Cmd+Shift+C
+		{
+			key = "c",
+			mods = "CMD|SHIFT",
+			action = wezterm.action.CopyTo("Clipboard"),
+		},
+
+		-- Cmd+V -> behave like Cmd+Shift+V
+		{
+			key = "v",
+			mods = "CMD|SHIFT",
+			action = wezterm.action.PasteFrom("Clipboard"),
+		},
+	},
+}

@@ -1,0 +1,2 @@
+# ~/.config/starship.toml
+command_timeout = 2000 # This is the default, you can try a higher value

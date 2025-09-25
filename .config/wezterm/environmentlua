@@ -1,0 +1,16 @@
+-- /Users/fugomika/.config/wezterm/environment.lua
+local M = {}
+local wezterm = require("wezterm")
+
+-- Determine the operating system.
+-- WezTerm provides wezterm.platform which is a more robust way to do this.
+-- Or you can set it directly.
+if wezterm.target_triple:find("apple") then
+	M.os = "mac"
+elseif wezterm.target_triple:find("pc-windows") then
+	M.os = "windows"
+else
+	M.os = "linux" -- Or whatever is appropriate for your OS
+end
+
+return M
