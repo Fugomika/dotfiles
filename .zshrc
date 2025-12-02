@@ -152,3 +152,5 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 eval "$(starship init zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 export PATH="/usr/local/opt/mysql@8.4/bin:$PATH"
+export HOMEBREW_FORCE_BOTTLES=1
+export PATH="/usr/local/mysql/bin:$PATH"
