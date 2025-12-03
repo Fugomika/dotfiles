@@ -1,2 +1,4 @@
 gh/
 github-copilot/
+.ssh/known_hosts*
+.ssh/id_rsa*

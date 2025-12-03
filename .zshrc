@@ -99,7 +99,17 @@ source $ZSH/oh-my-zsh.sh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
 
-# Aliases
+### ---------------------------------------------
+###  OS DETECTION
+### ---------------------------------------------
+IS_MAC=false
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    IS_MAC=true
+fi
+
+### ---------------------------------------------
+###  ALIASES
+### ---------------------------------------------
 alias lh="ls -lah"
 alias hyprconf="nvim ~/.config/hypr/hyprland.conf"
 
@@ -112,13 +122,18 @@ alias relgrub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 alias zshconfig="nvim ~/.zshrc"
 alias relzsh="source ~/.zshrc"
 
-alias brewrefresh="brew update && brew upgrade && brew cleanup && brew autoremove"
-
 alias air='~/go/bin/air'
 
-HOMEBREW_NO_AUTO_UPDATE=1
+if $IS_MAC && command -v brew >/dev/null 2>&1; then
+    alias brewrefresh="brew update && brew upgrade && brew cleanup && brew autoremove"
+    export HOMEBREW_NO_AUTO_UPDATE=1
+    export HOMEBREW_FORCE_BOTTLES=1
+fi
 
-# php-switch
+### ---------------------------------------------
+###  PHP SWITCH (Only Mac w/ Homebrew)
+### ---------------------------------------------
+if $IS_MAC && command -v brew >/dev/null 2>&1; then
 php-switch() {
     local version=$1
     if [ -z "$version" ]; then
@@ -129,28 +144,57 @@ php-switch() {
     if brew list php@"$version" >/dev/null 2>&1; then
         current_php=$(php -v | head -n1)
         echo "Switching from $current_php to PHP $version..."
+
         brew unlink php@$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
         brew link php@"$version" --force --overwrite
+
         php -v | head -n1
     else
         echo "Undefined: PHP $version is not installed via Homebrew."
     fi
 }
+fi
 
+### ---------------------------------------------
+###  TOOLS
+### ---------------------------------------------
 # NVM
 export NVM_DIR="$HOME/.nvm"
   [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
-# Plugins
-# source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# ZSH Plugins
+plugin_paths=(
+    "/usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    "/usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+)
 
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+for plugin in "${plugin_paths[@]}"; do
+    if [ -f "$plugin" ]; then
+        source "$plugin"
+    else
+        echo "⚠️ Plugin not found: $plugin"
+    fi
+done
 
-eval "$(starship init zsh)"
-eval "$(zoxide init --cmd cd zsh)"
-export PATH="/usr/local/opt/mysql@8.4/bin:$PATH"
-export HOMEBREW_FORCE_BOTTLES=1
-export PATH="/usr/local/mysql/bin:$PATH"
+# Starship
+if command -v starship >/dev/null 2>&1; then
+    eval "$(starship init zsh)"
+else
+    echo "⚠️ Starship is not installed."
+fi
+
+# Zoxide
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init --cmd cd zsh)"
+else
+    echo "⚠️ Zoxide is not installed."
+fi
+
+### ---------------------------------------------
+###  PATH EXTENSIONS
+### ---------------------------------------------
+if $IS_MAC; then
+    [ -d "/usr/local/opt/mysql@8.4/bin" ] && export PATH="/usr/local/opt/mysql@8.4/bin:$PATH"
+    [ -d "/usr/local/mysql/bin" ] && export PATH="/usr/local/mysql/bin:$PATH"
+fi
