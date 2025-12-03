@@ -133,27 +133,28 @@ fi
 ### ---------------------------------------------
 ###  PHP SWITCH (Only Mac w/ Homebrew)
 ### ---------------------------------------------
-if $IS_MAC && command -v brew >/dev/null 2>&1; then
-php-switch() {
-    local version=$1
-    if [ -z "$version" ]; then
-        echo "Usage: php-switch <version> (e.g. php-switch 7.4)"
-        return 1
-    fi
+# if $IS_MAC && command -v brew >/dev/null 2>&1; then
+# php-switch() {
+#     local version=$1
+#     if [ -z "$version" ]; then
+#         echo "Usage: php-switch <version> (e.g. php-switch 7.4)"
+#         return 1
+#     fi
 
-    if brew list php@"$version" >/dev/null 2>&1; then
-        current_php=$(php -v | head -n1)
-        echo "Switching from $current_php to PHP $version..."
+#     if brew list php@"$version" >/dev/null 2>&1; then
+#         current_php=$(php -v | head -n1)
+#         echo "Switching from $current_php to PHP $version..."
 
-        brew unlink php@$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
-        brew link php@"$version" --force --overwrite
+#         brew unlink php@$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
+#         brew link php@"$version" --force --overwrite
 
-        php -v | head -n1
-    else
-        echo "Undefined: PHP $version is not installed via Homebrew."
-    fi
-}
-fi
+#         php -v | head -n1
+#     else
+#         echo "Undefined: PHP $version is not installed via Homebrew."
+#     fi
+# }
+# fi
+#fuck homebrew im using macports
 
 ### ---------------------------------------------
 ###  TOOLS
@@ -194,7 +195,7 @@ fi
 ### ---------------------------------------------
 ###  PATH EXTENSIONS
 ### ---------------------------------------------
-if $IS_MAC; then
-    [ -d "/usr/local/opt/mysql@8.4/bin" ] && export PATH="/usr/local/opt/mysql@8.4/bin:$PATH"
-    [ -d "/usr/local/mysql/bin" ] && export PATH="/usr/local/mysql/bin:$PATH"
-fi
+# if $IS_MAC; then
+#     [ -d "/usr/local/opt/mysql@8.4/bin" ] && export PATH="/usr/local/opt/mysql@8.4/bin:$PATH"
+#     [ -d "/usr/local/mysql/bin" ] && export PATH="/usr/local/mysql/bin:$PATH"
+# fi
